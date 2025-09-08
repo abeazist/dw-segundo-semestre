@@ -2,6 +2,7 @@ import fastify from 'fastify';
 import { contatoRoutes } from './routes/contato.routes.js';
 
 const server = fastify({ logger: true });
+const port = 3000
 
 // Registramos nosso plugin de rotas e adicionamos um prefixo a todas elas
 server.register(contatoRoutes, { prefix: '/api' });
