@@ -1,10 +1,15 @@
-import { ContatoService } from '../services/contato.service.js';
+// import { ContatoService } from '../services/contato.service.js';
 
 export class ContatoController {
   
   // O Controller está "amarrado" à implementação do ContatoService.
-  constructor() {
-    this.contatoService = new ContatoService();
+  // constructor() {
+  //   this.contatoService = new ContatoService();
+  // }
+
+ // Agora o Controller RECEBE o serviço. #ETAPA3
+  constructor(contatoService) {
+    this.contatoService = contatoService;
   }
 
   async getContatos(request, reply) {

@@ -1,10 +1,17 @@
-import { ContatoRepository } from '../repositories/contato.repository.js';
+// import { ContatoRepository } from '../repositories/contato.repository.js';
+// não precisa mais dele
+
 
 export class ContatoService {
   
-  // O Service está "amarrado" à implementação do ContatoRepository.
-  constructor() {
-    this.contatoRepository = new ContatoRepository();
+  // // O Service está "amarrado" à implementação do ContatoRepository. #ETAPA2
+  // constructor() {
+  //   this.contatoRepository = new ContatoRepository();
+  // }
+
+   // Agora o Service RECEBE o repositório. Ele não o cria mais. #ETAPA3
+  constructor(contatoRepository) {
+    this.contatoRepository = contatoRepository;
   }
 
   getAllContatos() {
