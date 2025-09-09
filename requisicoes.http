@@ -1,28 +1,24 @@
 ### Variáveis
 @url=http://localhost:3000
 
+### Buscar todos os contatos
+GET {{url}}/api/contatos
 
-### Contatos
-GET {{url}}/contatos
+### Buscar contato por ID
+GET {{url}}/api/contatos/4
 
-### 
-GET {{url}}/contatos/4
-
-
-
-
-### Requisição POST
-POST {{url}}/contatos
+### Criar contato
+POST {{url}}/api/contatos
 Content-Type: application/json
 
 {
-    "nome":"Bernardo2",
-    "email": "bernardo@gmail.com",
-    "telefone": "44123451234"
+    "nome":"Beatriz",
+    "email": "beatriz@gmail.com",
+    "telefone": "4412472634"
 }
 
-### Requisição PUT
-PUT {{url}}/contatos/1
+### Atualizar contato
+PUT {{url}}/api/contatos/1
 Content-Type: application/json
 
 {    
@@ -31,5 +27,5 @@ Content-Type: application/json
     "telefone": "44123451234"
 }
 
-### Requisição DELETE
-DELETE {{url}}/contatos/1
+### Deletar contato
+DELETE {{url}}/api/contatos/1
