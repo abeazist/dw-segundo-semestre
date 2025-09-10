@@ -5,16 +5,16 @@
 GET {{url}}/api/contatos
 
 ### Buscar contato por ID
-GET {{url}}/api/contatos/4
+GET {{url}}/api/contatos/b7206d62-5538-4140-b1b5-15974cd90b86
 
 ### Criar contato
 POST {{url}}/api/contatos
 Content-Type: application/json
 
 {
-    "nome":"Beatriz",
-    "email": "beatriz@gmail.com",
-    "telefone": "4412472634"
+    "nome":"Bernardo2",
+    "email": "bernardo@gmail.com",
+    "telefone": "44123451234"
 }
 
 ### Atualizar contato
@@ -28,4 +28,4 @@ Content-Type: application/json
 }
 
 ### Deletar contato
-DELETE {{url}}/api/contatos/1
+DELETE {{url}}/api/contatos/2
