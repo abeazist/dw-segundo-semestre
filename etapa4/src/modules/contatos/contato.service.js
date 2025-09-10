@@ -1,6 +1,8 @@
 // import { ContatoRepository } from '../repositories/contato.repository.js';
 // não precisa mais dele
 
+import { request } from "express";
+
 
 export class ContatoService {
   
@@ -22,9 +24,17 @@ export class ContatoService {
     return this.contatoRepository.findById(id);
   }
 
-  createContato(contatoData) {
+  getContatoByEmail(email){
+    return this.contatoRepository.findByEmail(email)
+  }
+
+  //DESAFIO PRÁTICO 1
+  createContato(nome,contatoData) {
     // No futuro, regras de negócio como "verificar email duplicado"
     // viveriam aqui, ANTES de chamar o repositório.
+    if (nome < 3) {
+      return null
+    }
     return this.contatoRepository.create(contatoData);
   }
 

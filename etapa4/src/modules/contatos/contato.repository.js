@@ -15,6 +15,10 @@ export class ContatoRepository {
     return this.#contatos.find(c => c.id === id);
   }
 
+  findByEmail(email){
+    return this.#contatos.find(c => c.email === email);
+  }
+
   create(contatoData) {
     const novoContato = { id: randomUUID(), ...contatoData };
     this.#contatos.push(novoContato);
