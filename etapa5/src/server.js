@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import { contatoRoutes } from './modules/contatos/contato.routes';
+import  {contatoRoutes}  from './modules/contatos/contato.routes.js';
 
 const server = fastify({ logger: true });
 const port = 3000
