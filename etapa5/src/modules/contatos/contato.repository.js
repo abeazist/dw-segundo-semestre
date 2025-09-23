@@ -1,54 +1,75 @@
+
+// Importa a função para gerar UUIDs únicos para cada contato
 import { randomUUID } from 'node:crypto';
-import dbPool from '../../infra/database.js';
+
+// Importa a instância do banco de dados configurada
+import db from '../../infra/database.js';
+
+// Importa a função 'eq' para criar condições de igualdade nas queries
+import { eq } from 'drizzle-orm';
+
+// Importa o objeto que representa a tabela 'contatos' do schema do banco
+import { contatos } from '../../infra/db/schema.js';
 
 
-// Esta classe herda toda a responsabilidade de acesso a dados do antigo ContatoModel. O código é praticamente o mesmo, apenas realocado em um novo arquivo e classe.
-
-
+// Classe responsável por acessar e manipular os dados da tabela de contatos
 export class ContatoRepository {
   constructor() {
-    this.database = dbPool
+    // Guarda a instância do banco de dados para uso nos métodos
+    this.db = db;
+    
   }
 
+
+  // Retorna todos os contatos cadastrados no banco
   async findAll() {
-    const result = await this.database.query('SELECT * FROM contatos ORDER BY nome ASC');
-    return result.rows;
+    return this.db.select().from(contatos);
   }
 
+
+  // Busca um contato pelo seu ID único
   async findById(id) {
-    const result = await this.db.query('SELECT * FROM contatos WHERE id = $1', [id]);
-    return result.rows[0] || null;
+    const result = await this.db.select().from(contatos).where(eq(contatos.id, id));
+    // Retorna o primeiro resultado ou null se não encontrar
+    return result[0] || null;
   }
-  
 
-  // findByEmail(email){
-  //   return this.#contatos.find(c => c.email === email);
-  // }
 
+  // Cria um novo contato no banco de dados
+  // Gera um ID único e insere os dados recebidos
   async create(contatoData) {
-    const { nome, email, telefone } = contatoData;
     const id = randomUUID();
-    
-    const sql = 'INSERT INTO contatos (id, nome, email, telefone) VALUES ($1, $2, $3, $4) RETURNING *';
-    const values = [id, nome, email, telefone];
-    
-    const result = await this.db.query(sql, values);
-    return result.rows[0];
+    const result = await this.db.insert(contatos).values({
+      id, // ID gerado automaticamente
+      ...contatoData, // Demais campos vindos do parâmetro
+    }).returning(); // Retorna o registro inserido
+    return result[0];
   }
 
+
+  // Atualiza os dados de um contato existente pelo ID
   async update(id, contatoData) {
-    const { nome, email, telefone } = contatoData;
-
-    const sql = 'UPDATE contatos SET nome = $1, email = $2, telefone = $3 WHERE id = $4 RETURNING *';
-    const values = [nome, email, telefone, id];
-
-    const result = await this.db.query(sql, values);
-    return result.rows[0] || null;
+    const result = await this.db.update(contatos)
+      .set(contatoData) // Define os novos valores
+      .where(eq(contatos.id, id)) // Filtra pelo ID
+      .returning(); // Retorna o registro atualizado
+    return result[0] || null;
   }
 
+
+  // Remove um contato do banco pelo ID
+  // Retorna true se algum registro foi deletado, false caso contrário
   async remove(id) {
-    // O .query retorna um objeto de resultado. rowCount informa quantas linhas foram afetadas.
-    const result = await this.db.query('DELETE FROM contatos WHERE id = $1', [id]);
-    return result.rowCount > 0;
+    const result = await this.db.delete(contatos)
+      .where(eq(contatos.id, id))
+      .returning({ id: contatos.id }); // Pede o ID do item deletado de volta
+
+    return result.length > 0;
+  }
+
+  // Busca um contato pelo e-mail (útil para evitar duplicidade)
+  async findByEmail(email) {
+    const result = await this.db.select().from(contatos).where(eq(contatos.email, email));
+    return result[0] || null;
   }
 }
